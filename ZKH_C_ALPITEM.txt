@@ -1,0 +1,74 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Data Definition for ALP Item'
+@Metadata.ignorePropagatedAnnotations: true
+@ObjectModel.usageType:{
+    serviceQuality: #X,
+    sizeCategory: #S,
+    dataClass: #MIXED
+}
+
+define view entity ZKH_R_ALPITEM
+  as select from lips
+  association [0..1] to I_GoodsMovementTypeT         as _MovementDescription on  _MovementDescription.GoodsMovementType = lips.bwart
+                                                                             and _MovementDescription.Language          = $session.system_language
+  association [0..1] to I_SDProcessStatusText        as _FullTextStatus      on  $projection.OverAllStatus = _FullTextStatus.SDProcessStatus
+                                                                             and _FullTextStatus.Language  = $session.system_language
+  association [1..1] to I_StorageLocation            as _StorageLocationName on  $projection.Plant           = _StorageLocationName.Plant
+                                                                             and $projection.StorageLocation = _StorageLocationName.StorageLocation
+  association [1..1] to I_Plant                      as _PlantName           on  $projection.Plant = _PlantName.Plant
+  association [0..1] to I_SalesDocumentItemCategoryT as _CatName             on  $projection.ItemCategory = _CatName.SalesDocumentItemCategory
+                                                                             and _CatName.Language        = $session.system_language
+
+  association [1..1] to marm                         as _MARM                on  $projection.Material = _MARM.matnr
+                                                                             and $projection.BaseUnit = _MARM.meinh
+  //  association [0..1] to I_UnitOfMeasure              as _DeliveryQuantityUnit on  $projection.deliveryquantityunit = _DeliveryQuantityUnit.UnitOfMeasure
+
+{
+  key vbeln                                      as DeliveryNumber,
+  key cast(posnr as posnr preserving type )      as DeliveryItem,
+      cast(matnr as matnr preserving type )      as Material,
+      pstyv                                      as ItemCategory,
+      _CatName.SalesDocumentItemCategoryName     as ICategoryName,
+      erdat                                      as DeliveryDate,
+      werks                                      as Plant,
+      _PlantName.PlantName                       as PlantName,
+      lgort                                      as StorageLocation,
+      _StorageLocationName.StorageLocationName   as StorageLocationName,
+      kdmat                                      as Customer,
+  
+      _FullTextStatus.SDProcessStatusDesc        as StatusText,
+      bwart                                      as Movtype,
+      _MovementDescription.GoodsMovementTypeName as MovtypeDescription,
+
+
+
+      @DefaultAggregation: #SUM
+      @Semantics.quantity.unitOfMeasure: 'DeliveryQuantityUnit'
+      lfimg                                      as ActualDeliveryQuantity,
+      vrkme                                      as DeliveryQuantityUnit,
+
+      @DefaultAggregation: #SUM
+      @Semantics.quantity.unitOfMeasure: 'BaseUnit'
+      lgmng                                      as ActualDeliveredQtyInBaseUnit,
+
+      meins                                      as BaseUnit,
+        case gbsta 
+         when ' ' then 2
+         when 'A' then 1
+         when 'B' then 0
+         when 'C' then 3
+         else 5
+      end as Criticality, 
+      gbsta                                         as OverAllStatus
+//      @Semantics.quantity.unitOfMeasure: 'StandardUnit'
+//      lfimg  * _MARM.umrez / _MARM.umren as StandardizedQuantity ,
+//       'KG'                     as StandardUnit
+
+      //      @ObjectModel.foreignKey.association: '_DeliveryQuantityUnit'
+
+
+
+      //      _DeliveryQuantityUnit
+
+}

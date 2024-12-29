@@ -1,0 +1,348 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Data Definition for ALP doc'
+@Metadata.ignorePropagatedAnnotations: true
+@ObjectModel.usageType:{
+    serviceQuality: #X,
+    sizeCategory: #S,
+    dataClass: #MIXED
+}
+@Metadata.allowExtensions: true
+@OData.publish: true
+//@Analytics.query: true
+
+@UI.headerInfo: {
+    typeName : 'STO report', typeNamePlural : 'Deliveries',
+    title: {
+       type : #STANDARD,
+       value : 'DeliveryNumber'
+    },
+    description : {
+      type : #STANDARD,
+      value : 'DeliveryDate'
+    }
+}
+
+
+
+@UI.selectionPresentationVariant: [{
+   qualifier: 'Default',
+   presentationVariantQualifier: 'Default',
+   selectionVariantQualifier: 'Default'
+},
+{
+   qualifier: 'KPIbyCat',
+   presentationVariantQualifier: 'KPIbyCat',
+   selectionVariantQualifier: 'KPIbyCat'
+},
+
+{
+   qualifier: 'KPISample',
+   presentationVariantQualifier: 'KPISample',
+   selectionVariantQualifier: 'KPISample'
+},
+{
+   qualifier: 'StorageLocationFilter',
+   presentationVariantQualifier: 'StorageLocationFilter',
+   selectionVariantQualifier: 'StorageLocationFilter'
+},
+{
+   qualifier: 'DateFilter',
+   presentationVariantQualifier: 'DateFilter',
+   selectionVariantQualifier: 'DateFilter'
+}
+
+////Sample
+//{
+//   qualifier: 'DateFilter',
+//   presentationVariantQualifier: 'SampleFilter',
+//   selectionVariantQualifier: 'SampleFilter'
+//}
+]
+
+@UI.presentationVariant: [{
+   qualifier: 'Default',
+   visualizations: [{
+       type: #AS_CHART,
+       qualifier: 'ChartDefault'
+   }]
+},
+{
+    qualifier: 'SampleFilter',
+    text: 'Delivery Item Category',
+    visualizations: [{
+        type: #AS_CHART,
+        qualifier: 'FilterSample'
+     }]
+},
+
+{
+    qualifier: 'SampleFilter2',
+    text: 'Delivery Item Category',
+    visualizations: [{
+        type: #AS_CHART,
+        qualifier: 'FilterSample2'
+     }]
+},
+{
+    qualifier: 'VisualFilter',
+    text: 'Delivery Item Category',
+    visualizations: [{
+        type: #AS_CHART,
+        qualifier: 'FilterCategory'
+     }]
+},
+  {
+    qualifier: 'VisualMaterialF',
+    text: 'Delivery Item Category',
+    visualizations: [{
+        type: #AS_CHART,
+        qualifier: 'FilterMaterial'
+     }]
+},
+   {
+    qualifier: 'VisualDateF',
+    text: 'Delivery Item Category',
+    visualizations: [{
+        type: #AS_CHART,
+        qualifier: 'FilterByDate'
+     }]
+},
+{
+    qualifier: 'VisualStatus',
+    text: 'OverAllStatus',
+    visualizations: [{
+        type: #AS_CHART,
+        qualifier: 'FilterByStatus'
+     }]
+},
+{
+   qualifier: 'KPIbyCat',
+   text : 'KPI : Gross Amount by Item Category',
+   visualizations: [{
+         type : #AS_CHART,
+         qualifier: 'ChartKPI'
+     },
+     {
+         type : #AS_DATAPOINT,
+         qualifier: 'DeliveryCount'
+     }]
+},
+
+{
+   qualifier: 'KPISample',
+   text : 'KPI : Gross Amount by Item Category',
+   visualizations: [{
+         type : #AS_CHART,
+         qualifier: 'ChartKPISample'
+     },
+     {
+         type : #AS_DATAPOINT,
+         qualifier: 'DeliveryCount'
+     }]
+}
+]
+
+@UI.chart: [ {
+   qualifier: 'ChartDefault',
+   title: 'Gross Amount / Delivery Item Category',
+   chartType: #LINE,
+   dimensions: [ 'Material' ],
+   measures: [ 'DeliveryCount' ]
+},
+
+{
+    qualifier: 'FilterSample',
+    title: 'Sample Filter',
+    chartType: #COLUMN,
+    dimensions: [ 'Material' ],
+    measures: [ 'DeliveryCount' ]
+},
+
+{
+    qualifier: 'FilterSample2',
+    title: 'Sample Filter',
+    chartType: #COLUMN,
+    dimensions: [ 'ItemCategory' ],
+    measures: [ 'DeliveryCount' ]
+},
+{
+    qualifier: 'FilterCategory',
+    title: 'Delivery count by Storage location',
+    chartType: #COLUMN,
+    dimensions: [ 'StorageLocationName' ],
+    measures: [ 'DeliveryCount' ]
+},
+{
+    qualifier: 'FilterByDate',
+    title: 'Gross Amount Date',
+    chartType: #LINE,
+    dimensions: [ 'DeliveryDate' ],
+    measures: [ 'DeliveryCount' ]
+},
+{
+    qualifier: 'FilterByStatus',
+    title: 'Delivery count by Status',
+    chartType: #DONUT,
+    dimensions: [ 'StatusText' ],
+    measures: [ 'DeliveryCount' ]
+},
+{
+   qualifier: 'ChartKPI',
+   title : 'Delivery Count by Movement type',
+   chartType: #DONUT,
+   dimensions: [ 'MovtypeDescription' ],
+   measures: [ 'DeliveryCount' ],
+   dimensionAttributes: [{
+       dimension: 'MovtypeDescription',
+       role : #CATEGORY
+   }],
+   measureAttributes: [{
+       measure: 'DeliveryCount',
+       role : #AXIS_1
+   }]
+},
+{
+   qualifier: 'ChartKPISample',
+   title : 'Sample',
+   chartType: #DONUT,
+   dimensions: [ 'Material' ],
+   measures: [ 'DeliveryCount' ],
+   dimensionAttributes: [{
+       dimension: 'Material',
+       role : #CATEGORY
+   }],
+   measureAttributes: [{
+       measure: 'DeliveryCount',
+       role : #AXIS_1
+   }]
+}
+]
+
+@UI.selectionVariant: [{
+   qualifier: 'Default',
+   text : 'Default'
+},
+  {
+   qualifier: 'KPIbyCat',
+   text : 'Item Category'
+},
+
+  {
+   qualifier: 'KPISample',
+   text : 'Material'
+},
+  {
+   qualifier: 'StorageLocationFilter',
+   text : 'Storage Location Filter'
+},
+  {
+   qualifier: 'DateFilter',
+   text : 'Date Filter'
+}
+
+////Sample
+//  {
+//   qualifier: 'SampleFilter',
+//   text : 'Sample Filter'
+//}
+]
+
+define view entity ZKH_C_ALPDOC
+  as select from ZKH_R_ALPITEM
+  association [1..*] to ZKHR_ITEM_DETAILS as _Details on $projection.DeliveryNumber = _Details.DeliveryNumber
+
+{
+
+      @EndUserText.label: 'Delivery Number'
+      @UI: { lineItem: [{ position : 10,
+                          type: #WITH_INTENT_BASED_NAVIGATION,
+                           semanticObjectAction : 'displayInWebGuiExh'
+      //                           semanticObjectAction : 'show'
+      }] }
+      @Consumption.semanticObject: 'OutboundDelivery'
+  key DeliveryNumber,
+
+      @UI.lineItem: [{ position : 20 }]
+      @EndUserText.label: 'Delivery Item'
+  key DeliveryItem,
+
+      @UI.lineItem: [{ position : 30 }]
+      @EndUserText.label: 'Material'
+      @UI.selectionField: [{ position : 10 }]
+       @Consumption.defaultValue: 'MZ-FG-C900'
+      Material,
+
+      @UI.lineItem: [{ position : 40 }]
+      @EndUserText.label: 'Category'
+      @UI.selectionField: [{ position : 10 }]
+      ItemCategory,
+      @UI.lineItem: [{ position : 45 }]
+      @EndUserText.label: 'Category Name'
+
+      ICategoryName,
+
+      @Consumption.filter: { selectionType: #RANGE, multipleSelections: true }
+      @UI.lineItem: [{ position : 50 }]
+      @EndUserText.label: 'Delivery Date'
+      @UI.selectionField: [{ position : 30 }]
+     
+      DeliveryDate,
+
+      @UI.lineItem: [{ position : 51 }]
+      PlantName,
+
+
+      @UI.lineItem: [{ position : 55 }]
+      @Consumption.defaultValue: '0229'
+      @UI.selectionField: [{ position : 35 }]
+      StorageLocation,
+
+      @UI.lineItem: [{ position : 56 }]
+      @Consumption.defaultValue: '0229'
+      StorageLocationName,
+
+      @UI.dataPoint.title: 'Deliveries'
+      //      @Semantics.quantity.unitOfMeasure: 'DeliveryQuantityUnit'
+      @DefaultAggregation: #COUNT
+      count(*) as DeliveryCount,
+      //      ActualDeliveryQuantity,
+      //
+      //      DeliveryQuantityUnit,
+
+      Criticality,
+      @UI.lineItem: [{ position : 60  , criticality: 'Criticality'}]
+      @EndUserText.label: 'Status'
+      @AnalyticsDetails.query.display: #TEXT_KEY
+      @UI.selectionField: [{ position : 20 }]
+      OverAllStatus,
+      StatusText,
+
+
+      @EndUserText.label: 'Movement Type'
+      @UI.lineItem: [{ position : 70}]
+      //      @UI.dataPoint.title: 'Mov.type'
+      MovtypeDescription,
+      _Details
+
+}
+group by
+  DeliveryNumber,
+  DeliveryItem,
+  Material,
+  ItemCategory,
+  ICategoryName,
+  DeliveryDate,
+  PlantName,
+  StorageLocation,
+  StorageLocationName,
+  OverAllStatus,
+  StatusText,
+  Movtype,
+  Criticality,
+  MovtypeDescription,
+  Customer
+  
+  
+  
+ 

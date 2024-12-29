@@ -1,0 +1,16 @@
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'Data Definition for ALP doc'
+@Metadata.ignorePropagatedAnnotations: true
+@ObjectModel.usageType:{
+    serviceQuality: #X,
+    sizeCategory: #S,
+    dataClass: #MIXED
+}
+define view entity ZKH_R_ALPHEADER
+  as select from likp
+  association [0..*] to ZKHR_ALPITEM as _DeliveryItem on $projection.DeliveryDocument = _DeliveryItem.DeliveryNumber
+{
+  key vbeln as DeliveryDocument,
+      erdat as DeliveryDate
+}
